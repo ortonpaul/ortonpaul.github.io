@@ -74,7 +74,8 @@
   </style>
   <script src="https://apis.google.com/js/api.js"></script>
   <script>
-    var key = "AIzaSyD-Dui-YF6Zu49bttzzpjki_zrtpmcoG8s";
+    var PSkey = "fd73c51aad7f78f1d2b3ab65ca6db2e7";
+    var OSkey = "c41d6418-da86-44bb-8339-e88dcbe06382";
 
     function generateEmail() {
       var fields = document.getElementById("form").querySelectorAll("[required]")
@@ -94,53 +95,84 @@
       var address = street1 + " " + street2 + " " + city + " " + state + " " + zip;
       address = encodeURI(address);
 
-      var url = "https://civicinfo.googleapis.com/civicinfo/v2/representatives?address=" + address + "&key=" + key;
+      var PSurl = "http://api.positionstack.com/v1/forward?access_key=" + PSkey + "&query=" + address;
 
-      var request = new XMLHttpRequest();
-      request.onreadystatechange = function() {
+      var lat = '0';
+      var lng = '0';
+
+      var PSrequest = new XMLHttpRequest();
+      PSrequest.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           var result = JSON.parse(this.responseText);
-          var offices = result.offices;
-          var officials = result.officials;
-          var district = -1;
-          var found = true;
-
-          var indexes = [];
-
-          for (index in offices) {
-            if (offices[index].name == "MO State Representative") {
-              for (idx in offices[index].officialIndices) {
-                indexes.push(offices[index].officialIndices[idx]);
-                district = offices[index].divisionId.slice(-2);
-              }
-            }
-          }
-
-          var text = "No representative found. Make sure your address is correct.";
+          var lat = result.data[0].latitude;
+          var lng = result.data[0].longitude;
           
-          if (indexes.length == 0) {
-            document.getElementById("result").innerHTML = text;
-            document.getElementById("result").style.visibility = "visible";
-            found = false;
-          }
+          var OSurl = "https://v3.openstates.org/people.geo?lat=" + lat + "&lng=" + lng + "&apikey=" + OSkey;
 
-          var fName = "";
-          var lName = "";
-          var recipients = "";
+          var request = new XMLHttpRequest();
+          request.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              var result = JSON.parse(this.responseText);
+              var reps = result.results;
+              var found = true;
+              var text = '';
+              var district = -1;
 
-          for (index in indexes) {
-            var rep = officials[indexes[index]];
-            text += 'Representative: ' + rep.name + '<br>';
-            var names = rep.name.split(" ");
-            fName = names[0];
-            lName = names[names.length - 1];
-            text += 'District: ' + district + '<br>';
-            //text += '<a href="https://house.mo.gov/MemberDetails.aspx?district=' + district + '"/>Rep lookup</a><br>';
-            recipients += fName + '.' + lName + '@house.mo.gov,';
-          }
+              for (rep in reps) {
+                if (reps[rep].current_role.title == "Representative") {
+                  district = reps[rep].current_role.district;
+                  fName = reps[rep].given_name;
+                  lName = reps[rep].family_name;
+                }
+              }
 
+              if (district == -1) {
+                text = "No representative found. Make sure your address is correct.";
+                document.getElementById("result").innerHTML = text;
+                document.getElementById("result").style.visibility = "visible";
+                return;
+              }
 
-          var body = `Representative ` + lName + `,
+              text += 'Representative: ' + fName + ' ' + lName + '<br>';
+              text += 'District: ' + district + '<br>';
+              var recipients = '';
+
+              switch (district) {
+                case '2':
+                  recipients += 'J.Eggleston@house.mo.gov,';
+                  break;
+                case '9':
+                  recipients += 'Dean.Vanschoiack@house.mo.gov';
+                  break;
+                case '26':
+                  recipients += 'Ashley.Blandmanlove@house.mo.gov,';
+                  break;
+                case '34':
+                  recipients += 'VACANT';
+                  break;
+                case '44':
+                  recipients += 'Cheri.Toalson-Reisch@house.mo.gov,';
+                  break;
+                case '77':
+                  recipients += 'KimberlyAnn.Collins@house.mo.gov,';
+                  break;
+                case '84':
+                  recipients += 'Wiley.Price@house.mo.gov,';
+                  break;
+                case '93':
+                  recipients += 'Bridget.Walshmoore@house.mo.gov,';
+                  break;
+                case '97':
+                  recipients += 'MaryElizabeth.Coleman@house.mo.gov,';
+                  break;
+                case '115':
+                  recipients += 'Cyndi.Buchheitcourtway@house.mo.gov,';
+                  break;
+                default:
+                  recipients += fName + '.' + lName + '@house.mo.gov,';
+              }
+
+              var body = `Representative ` + lName + `,
  
 I’m reaching out to demand action from you on behalf of the Palestinians being displaced, injured, and killed at the hands of Israeli forces.
  
@@ -154,17 +186,23 @@ As a constituent, I am demanding the following from you:
 - Support sanctions on Israel until it puts an end to its apartheid regime
 
 Signed,`;
-          body = encodeURI(body);
-          if (found) {
-            text += '<button><a href="mailto:' + recipients + '?subject=Demand%20Justice%20for%20Palestine&body=' + body + '" target="blank">Send Email</a></button>';
-          }
+              body = encodeURI(body);
+              if (found) {
+                text += '<button><a href="mailto:' + recipients + '?subject=Demand%20Justice%20for%20Palestine&body=' + body + '" target="blank">Send Email</a></button>';
+              }
 
-          document.getElementById("result").innerHTML = text;
-          document.getElementById("result").style.visibility = "visible";
+              document.getElementById("result").innerHTML = text;
+              document.getElementById("result").style.visibility = "visible";
+            }
+          };
+          request.open("GET", OSurl, true);
+          request.send();
         }
       };
-      request.open("GET", url, true);
-      request.send();
+      PSrequest.open("GET", PSurl, true);
+      PSrequest.send();
+
+
     }
   </script>
 </head>
