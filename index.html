@@ -3,6 +3,7 @@
 
 <head>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+  <link rel="icon" type="image/png" href="favicon.png" />
   <style>
     body {
       font-family: "Roboto", sans-serif;
@@ -106,7 +107,7 @@
           var result = JSON.parse(this.responseText);
           var lat = result.data[0].latitude;
           var lng = result.data[0].longitude;
-          
+
           var OSurl = "https://v3.openstates.org/people.geo?lat=" + lat + "&lng=" + lng + "&apikey=" + OSkey;
 
           var request = new XMLHttpRequest();
@@ -195,6 +196,8 @@ Signed,`;
               document.getElementById("result").style.visibility = "visible";
             }
           };
+          document.getElementById("result").innerHTML = '<img src="loading.gif">';
+          document.getElementById("result").style.visibility = "visible";
           request.open("GET", OSurl, true);
           request.send();
         }
