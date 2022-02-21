@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'soundboard';
+
+  sounds: { name: string, path: string }[] = [
+    { "name": "Paul eugh", "path": "../../assets/eugh.m4a"},
+    { "name": "Payton meow", "path": "../../assets/meow.m4a"}
+  ]
 }

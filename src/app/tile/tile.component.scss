@@ -1,0 +1,16 @@
+.tile-wrapper {
+    height: 100px;
+    width: 100px;
+    background-color: lightskyblue;
+    border: 2px solid black;
+    color: black;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    border-radius: 15px;
+    font-size: 24px;
+    word-wrap: break-word;
+    padding: 5px;
+    margin: 5px;
+    cursor: pointer;
+}
