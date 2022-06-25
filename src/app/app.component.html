@@ -1,8 +1,47 @@
-<div class="soundboard-wrapper">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div *ngIf="showSoundboard" class="soundboard-wrapper">
   <div class="title">Soundboard</div>
+  <mat-icon (click)="toggleView()">airplanemode_active</mat-icon>
   <div class="tile-wrapper">
     <div *ngFor="let sound of sounds">
       <app-tile [name]="sound.name" [path]="sound.path"></app-tile>
     </div>
+  </div>
+</div>
+<div *ngIf="showAirports" class="airports-wrapper">
+  <div class="app-wrapper">
+    <h1>Southwest Airport Codes</h1>
+    <mat-icon (click)="toggleView()">airplanemode_inactive</mat-icon>
+    <div class="buttons">
+      <button (click)="chooseNames()" [ngClass]="{'selected': mode == 0}">Names</button>
+      <button (click)="chooseCodes()" [ngClass]="{'selected': mode == 1}">Codes</button>
+    </div>
+    <div class="learning-wrapper">
+      <div class="learning-header">
+        <p id="count">{{count}} / {{length}}</p>
+        <mat-icon (click)="resetApp()">autorenew</mat-icon>
+      </div>
+      <div class="message">
+        <div id="success" class="hidden">Correct!</div>
+        <div id="failure" class="hidden">Incorrect</div>
+      </div>
+      <div class="text">
+        <div id="text">{{airportText}}</div>
+      </div>
+      <div class="input">
+        <input id="input" type="text" [(ngModel)]="guess" placeholder="{{placeholder}}">
+        <mat-icon (click)="skip()">cancel</mat-icon>
+        <mat-icon (click)="checkGuess()">check_circle</mat-icon>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="showModal" id="modal" class="hidden">
+  <div class="modal-content">
+    <mat-icon (click)="closeModal()">close</mat-icon>
+    <div id="modal-title">
+      Airport Skipped
+    </div>
+    <div id="modal-text">{{modalText}}</div>
   </div>
 </div>
