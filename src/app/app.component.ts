@@ -234,9 +234,9 @@ export class AppComponent implements OnInit {
 
     banner?.classList.remove("hidden");
     console.log("test");
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 500));
     banner?.classList.add("fade-out");
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 500));
     banner?.classList.remove("fade-out");
     banner?.classList.add("hidden");
   }
