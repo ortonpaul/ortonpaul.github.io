@@ -22,7 +22,7 @@
         <mat-icon (click)="resetApp()">autorenew</mat-icon>
       </div>
       <div class="message">
-        <div id="success" class="hidden">Correct!</div>
+        <div id="success" class="hidden">{{correctText}}</div>
         <div id="failure" class="hidden">Incorrect</div>
       </div>
       <div class="text">
@@ -39,9 +39,7 @@
 <div *ngIf="showModal" id="modal" class="hidden">
   <div class="modal-content">
     <mat-icon (click)="closeModal()">close</mat-icon>
-    <div id="modal-title">
-      Airport Skipped
-    </div>
+    <div id="modal-title">Airport Skipped</div>
     <div id="modal-text">{{modalText}}</div>
   </div>
 </div>

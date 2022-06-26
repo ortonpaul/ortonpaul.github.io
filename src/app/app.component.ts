@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   airportText = "";
   countText = "";
   modalText = "";
+  correctText = "";
   index = 0;
   completed = new Array<number>();
   count = 0;
@@ -154,7 +155,6 @@ export class AppComponent implements OnInit {
     this.initializeApp();
   }
 
-
   initializeApp() {
     this.count = 1;
     this.placeholder = "COU";
@@ -197,8 +197,9 @@ export class AppComponent implements OnInit {
      this.modalText = "The airport you skipped was " + Object.values(this.destinations)[this.index] + " with code " + Object.keys(this.destinations)[this.index];
   }
 
-  checkGuess() {
+  async checkGuess() {
     var actual;
+    var banner;
     if (this.mode == 0) {
       actual = Object.values(this.destinations)[this.index];
     } else {
@@ -206,18 +207,28 @@ export class AppComponent implements OnInit {
     }
 
     if (this.guess.toUpperCase() == actual.toUpperCase()) {
-      console.log(this.count);
       this.count++;
-      console.log(this.count);
 
       if (this.count > this.length) {
         this.resetApp();
       }
 
+      banner = document.getElementById('success')
+      this.randomizeCorrectText();
       this.completed.push(this.index);
       this.index = this.generateIndex();
       this.updateDisplay();
+    } else {
+      banner = document.getElementById('failure')
     }
+
+    banner?.classList.remove("hidden");
+    console.log("test");
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    banner?.classList.add("fade-out");
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    banner?.classList.remove("fade-out");
+    banner?.classList.add("hidden");
   }
 
    closeModal() {
@@ -239,5 +250,20 @@ export class AppComponent implements OnInit {
     }
 
     return n;
+  }
+
+  randomizeCorrectText() {
+    let texts = [
+      "Correct!",
+      "You better work",
+      "Slayyyyyy",
+      "YASSSSS",
+      "Okay Girlboss!",
+      "Go besite ❤"
+    ];
+
+    let n = Math.floor(Math.random() * texts.length);
+
+    this.correctText = texts[n];
   }
 }
