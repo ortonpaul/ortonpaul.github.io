@@ -88,7 +88,7 @@ export class AppComponent implements OnInit {
     'RSW': 'Ft. Myers / Naples',
     'DEN': 'Denver',
     'IAD': 'Washington D.C. (Dulles)',
-    'SFO': 'San Francisco (SFO)',
+    'SFO': 'San Francisco',
     'MSP': 'Minneapolis / St. Paul',
     'LGA': 'New York (LaGuardia)',
     'BOS': 'Boston Logan',

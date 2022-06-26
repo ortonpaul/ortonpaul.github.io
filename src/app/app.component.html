@@ -29,7 +29,7 @@
         <div id="text">{{airportText}}</div>
       </div>
       <div class="input">
-        <input id="input" type="text" [(ngModel)]="guess" placeholder="{{placeholder}}">
+        <input id="input" type="text" [(ngModel)]="guess" placeholder="{{placeholder}}" (keydown.enter)="checkGuess()">
         <mat-icon (click)="skip()">cancel</mat-icon>
         <mat-icon (click)="checkGuess()">check_circle</mat-icon>
       </div>
