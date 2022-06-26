@@ -220,7 +220,17 @@ export class AppComponent implements OnInit {
       this.updateDisplay();
     } else {
       banner = document.getElementById('failure')
-    }
+      let audio = new Audio();
+      audio.src = "../assets/eugh.m4a";
+      audio.load();
+      var promise = audio.play();
+  
+      if(promise !== undefined) {
+        promise.then().catch(function(error){
+          window.alert(error);
+        })
+      }
+      }
 
     banner?.classList.remove("hidden");
     console.log("test");
